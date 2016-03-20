@@ -1,6 +1,7 @@
 (ns gemtoes.handlers
     (:require [re-frame.core :as re-frame :refer [register-handler]]
-              [gemtoes.db :as db]))
+              [gemtoes.db :as db]
+              [gemtoes.api-calls :as api-calls :refer [get-makers post-maker]]))
 
 (register-handler
  :initialize-db
@@ -10,16 +11,24 @@
 (register-handler
   :update-makers
   (fn [db [_ makers]]
-    (merge db makers)))
+    (assoc db :makers makers :makers-loading? false)))
 
 (register-handler
  :activate-new-maker
  (fn [db [_]]
-   (assoc db :new-maker-active true)))
+   (assoc db :new-maker-active? true)))
 
 (register-handler
  :add-maker
  (fn [db [_ maker-name]]
    (if (some #(= maker-name (:name %)) (:makers db))
      db
-     (assoc db :makers (conj (:makers db) {:name maker-name})))))
+     (do
+       (post-maker {:name maker-name})
+       db))))
+
+(register-handler
+ :get-makers
+ (fn [db [_]]
+   (get-makers)
+   (assoc db :makers-loading? true)))

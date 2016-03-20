@@ -8,6 +8,6 @@
     (reaction (:makers @db))))
 
 (register-sub
- :new-maker-active
+ :new-maker-active?
    (fn [db]
-     (reaction (:new-maker-active @db))))
+     (reaction (:new-maker-active? @db))))

@@ -5,8 +5,7 @@
             [gemtoes.handlers]
             [gemtoes.subs]
             [gemtoes.db :as db]
-            [gemtoes.views :as views]
-            [ajax.core :refer [GET]]))
+            [gemtoes.views :as views]))
 
 (when config/debug?
   (println "dev mode"))
@@ -15,13 +14,9 @@
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 
-(defn ^:export init! []
+(defn ^:export init []
   (re-frame/dispatch-sync [:initialize-db])
+  (re-frame/dispatch [:get-makers])
   (mount-root))
 
-;;admin API GET calls
-(defn get-makers []
-  (GET "/api/makers" []
-       {:response-format :json
-        :keywords? true
-        :handler #(re-frame/dispatch [:update-makers [:makers %]])}))
+
