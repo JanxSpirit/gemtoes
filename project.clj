@@ -6,20 +6,26 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [ring-server "0.4.0"]
+                 [metosin/ring-http-response "0.6.5"]
                  [reagent "0.5.1"
                   :exclusions [org.clojure/tools.reader]]
                  [reagent-forms "0.5.21"]
                  [reagent-utils "0.1.7"]
                  [ring "1.4.0"]
                  [ring/ring-defaults "0.1.5"]
+                 [ring-middleware-format "0.7.0"]
                  [compojure "1.5.0"]
                  [hiccup "1.0.5"]
                  [environ "1.0.2"]
+                 [com.novemberain/monger "3.0.2"]
                  [org.clojure/clojurescript "1.7.228"
                   :scope "provided"]
                  [secretary "1.2.3"]
                  [venantius/accountant "0.1.7"
-                  :exclusions [org.clojure/tools.reader]]]
+                  :exclusions [org.clojure/tools.reader]]
+                 [cljs-http "0.1.39"]
+                 [cljs-ajax "0.5.4"]
+                 [re-frame "0.7.0"]]
 
   :plugins [[lein-environ "1.0.2"]
             [lein-cljsbuild "1.1.1"]
