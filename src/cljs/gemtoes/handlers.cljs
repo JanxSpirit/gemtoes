@@ -16,3 +16,10 @@
  :activate-new-maker
  (fn [db [_]]
    (assoc db :new-maker-active true)))
+
+(register-handler
+ :add-maker
+ (fn [db [_ maker-name]]
+   (if (some #(= maker-name (:name %)) (:makers db))
+     db
+     (assoc db :makers (conj (:makers db) {:name maker-name})))))

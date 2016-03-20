@@ -1,6 +1,6 @@
 (ns gemtoes.db)
 
 (def default-db
-  {:makers ["Carmina" "Bonafe"]
+  {:makers [{:name "Carmina"} {:name "Bonafe"}]
    :gmtos []
    :new-maker-active false})
