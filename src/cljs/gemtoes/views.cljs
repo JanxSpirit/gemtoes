@@ -4,6 +4,7 @@
 
 (defn main-panel []
   (let [new-maker-active? (subscribe [:new-maker-active?])
+        new-maker-current-value (subscribe [:new-maker-current-value])
         makers (subscribe [:makers])
         maker-names (reaction (map :name @makers))]
     (fn []
@@ -14,9 +15,12 @@
             [:li
               (if @new-maker-active?
                 [:input {:type "text"
+                         :value @new-maker-current-value
                          :on-key-press (fn [e]
                                  (if (= 13 (.-charCode e))
-                                   (dispatch [:add-maker (-> e .-target .-value)])))}]
+                                   (dispatch [:add-maker (-> e .-target .-value)])))
+                         :on-change (fn [e]
+                                      (dispatch [:update-new-maker-value (-> e .-target .-value)]))}]
                 [:a {:href "#"
                  :on-click #(dispatch [:activate-new-maker])}
                  "Add new maker"])]]])))

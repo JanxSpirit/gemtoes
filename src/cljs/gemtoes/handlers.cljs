@@ -25,7 +25,15 @@
      db
      (do
        (post-maker {:name maker-name})
-       db))))
+       (-> db
+          (assoc :new-maker-active? false)
+          (assoc :new-maker-current-value "")
+       )))))
+
+(register-handler
+ :update-new-maker-value
+ (fn [db [_ maker-name]]
+   (assoc db :new-maker-current-value maker-name)))
 
 (register-handler
  :get-makers

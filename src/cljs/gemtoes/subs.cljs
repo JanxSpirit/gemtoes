@@ -11,3 +11,8 @@
  :new-maker-active?
    (fn [db]
      (reaction (:new-maker-active? @db))))
+
+(register-sub
+ :new-maker-current-value
+   (fn [db]
+     (reaction (:new-maker-current-value @db))))
