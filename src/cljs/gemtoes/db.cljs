@@ -1,7 +1,12 @@
 (ns gemtoes.db)
 
+(def empty-maker {:name ""
+                   :fullname ""
+                   :country ""})
+
 (def default-db
   {:makers []
    :gmtos []
-   :new-maker-current-value ""
-   :new-maker-active? false})
+   :current-maker empty-maker
+   :new-maker-active? false
+   :focus-element-id ""})

@@ -32,10 +32,12 @@
      [:meta {:charset "utf-8"}]
      [:meta {:name "viewport"
              :content "width=device-width, initial-scale=1"}]
-     (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))]
+     (include-css (if (env :dev) "/css/bootstrap.css" "/css/bootstrap.min.css"))]
     [:body
      mount-target
-     (include-js "/js/app.js")]))
+     (include-js "/js/app.js")
+     (include-js "/js/jquery.js")
+     (include-js "/js/bootstrap.min.js")]))
 
 
 (defroutes routes

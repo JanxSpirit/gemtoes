@@ -1,18 +1,33 @@
 (ns gemtoes.subs
-    (:require-macros [reagent.ratom :refer [reaction]])
-    (:require [re-frame.core :as re-frame :refer [register-sub]]))
+  (:require-macros [reagent.ratom :refer [reaction]])
+  (:require [re-frame.core :as re-frame :refer [register-sub]]))
 
 (register-sub
-  :makers
-  (fn [db]
-    (reaction (:makers @db))))
+ :makers
+ (fn [db]
+   (reaction (:makers @db))))
 
 (register-sub
  :new-maker-active?
-   (fn [db]
-     (reaction (:new-maker-active? @db))))
+ (fn [db]
+   (reaction (:new-maker-active? @db))))
 
 (register-sub
- :new-maker-current-value
-   (fn [db]
-     (reaction (:new-maker-current-value @db))))
+ :current-maker-name
+ (fn [db]
+   (reaction (get-in @db [:current-maker :name]))))
+
+(register-sub
+ :current-maker-fullname
+ (fn [db]
+   (reaction (get-in @db [:current-maker :fullname]))))
+
+(register-sub
+ :current-maker-country
+ (fn [db]
+   (reaction (get-in @db [:current-maker :country]))))
+
+(register-sub
+ :set-focus
+ (fn [db]
+   (reaction (:focus-element-id @db))))
