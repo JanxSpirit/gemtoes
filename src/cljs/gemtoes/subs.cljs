@@ -28,6 +28,11 @@
    (reaction (get-in @db [:current-maker :country]))))
 
 (register-sub
+ :current-maker-min-order
+ (fn [db]
+   (reaction (get-in @db [:current-maker :min-order]))))
+
+(register-sub
  :set-focus
  (fn [db]
    (reaction (:focus-element-id @db))))

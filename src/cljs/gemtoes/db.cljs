@@ -1,8 +1,9 @@
 (ns gemtoes.db)
 
 (def empty-maker {:name ""
-                   :fullname ""
-                   :country ""})
+                  :fullname ""
+                  :country ""
+                  :min-order 1})
 
 (def default-db
   {:makers []

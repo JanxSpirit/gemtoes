@@ -26,7 +26,8 @@
      (do
        (post-maker {:name (get-in db [:current-maker :name])
                     :fullname (get-in db [:current-maker :fullname])
-                    :country (get-in db [:current-maker :country])})
+                    :country (get-in db [:current-maker :country])
+                    :min-order (get-in db [:current-maker :min-order])})
        (-> db
            (assoc :new-maker-active? false)
            (assoc :current-maker db/empty-maker))))))
@@ -45,6 +46,11 @@
  :update-current-maker-country
  (fn [db [_ country]]
    (assoc db :current-maker (assoc (:current-maker db {}) :country country))))
+
+(register-handler
+ :update-current-maker-min-order
+ (fn [db [_ min-order]]
+   (assoc db :current-maker (assoc (:current-maker db {}) :min-order min-order))))
 
 (register-handler
  :get-makers

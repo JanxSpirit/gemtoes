@@ -20,7 +20,8 @@
   []
   (let [current-maker-name (subscribe [:current-maker-name])
         current-maker-fullname (subscribe [:current-maker-fullname])
-        current-maker-country (subscribe [:current-maker-country])]
+        current-maker-country (subscribe [:current-maker-country])
+        current-maker-min-order (subscribe [:current-maker-min-order])]
     (fn []
       [:form
        [:div.form-group
@@ -44,6 +45,13 @@
                                              :value @current-maker-country
                                              :on-change (fn [e]
                                                           (dispatch [:update-current-maker-country (-> e .-target .-value)]))}]]
+       [:div.form-group
+        [:label {:for "new-maker-min-order"} "Minimum Order:"]
+        [:input#new-maker-min-order.form-control {:type "text"
+                                             :value @current-maker-min-order
+                                             :on-change (fn [e]
+                                                          (dispatch [:update-current-maker-min-order (-> e .-target .-value)]))}]]
+
        [:div.form-group
         [:button.btn.btn-default {:type "submit"
                                   :on-click (fn [e]
