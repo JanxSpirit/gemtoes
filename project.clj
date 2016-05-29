@@ -5,8 +5,11 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.8.0"]
+                 [com.cemerick/piggieback "0.2.1"]
+                 [figwheel-sidecar "0.5.0-2"]
                  [ring-server "0.4.0"]
                  [metosin/ring-http-response "0.6.5"]
+                 [metosin/compojure-api "1.1.2"]
                  [reagent "0.5.1"
                   :exclusions [org.clojure/tools.reader]]
                  [reagent-forms "0.5.21"]
@@ -52,13 +55,14 @@
   {:assets
    {"resources/public/css/site.min.css" "resources/public/css/site.css"}}
 
+  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+
   :cljsbuild {:builds {:app {:source-paths ["src/cljs" "src/cljc"]
                              :compiler {:output-to "target/cljsbuild/public/js/app.js"
                                         :output-dir "target/cljsbuild/public/js/out"
                                         :asset-path   "/js/out"
                                         :optimizations :none
                                         :pretty-print  true}}}}
-
 
   :profiles {:dev {:repl-options {:init-ns gemtoes.repl}
 
