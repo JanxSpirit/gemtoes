@@ -9,5 +9,5 @@
   {:makers []
    :gmtos []
    :current-maker empty-maker
-   :new-maker-active? false
+   :active-edit-maker ""
    :focus-element-id ""})
