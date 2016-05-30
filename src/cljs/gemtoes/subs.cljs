@@ -36,3 +36,8 @@
  :set-focus
  (fn [db]
    (reaction (:focus-element-id @db))))
+
+(register-sub
+ :active-edit-maker
+ (fn [db]
+   (reaction (:active-edit-maker @db))))

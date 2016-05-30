@@ -14,9 +14,9 @@
    (assoc db :makers makers :makers-loading? false)))
 
 (register-handler
- :activate-new-maker
- (fn [db [_]]
-   (assoc db :new-maker-active? true)))
+ :activate-edit-maker
+ (fn [db [_ id]]
+   (assoc db :active-edit-maker id)))
 
 (register-handler
  :save-maker
@@ -29,7 +29,7 @@
                     :country (get-in db [:current-maker :country])
                     :min-order (get-in db [:current-maker :min-order])})
        (-> db
-           (assoc :new-maker-active? false)
+           (dissoc :active-edit-maker)
            (assoc :current-maker db/empty-maker))))))
 
 (register-handler
@@ -50,7 +50,9 @@
 (register-handler
  :update-current-maker-min-order
  (fn [db [_ min-order]]
-   (assoc db :current-maker (assoc (:current-maker db {}) :min-order min-order))))
+   (assoc-in db [:current-maker :min-order] 
+             (let [int-min-order (js/parseInt min-order)]
+               (if (js/isNaN int-min-order) 0 int-min-order)))))
 
 (register-handler
  :get-makers

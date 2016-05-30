@@ -6,7 +6,7 @@
 (defn new-maker-link
   []
   [:a {:href "#"
-       :on-click #(dispatch [:activate-new-maker])}
+       :on-click #(dispatch [:activate-edit-maker "new"])}
    "Add new maker"]
   )
 
@@ -39,6 +39,7 @@
                                                   :value @current-maker-fullname
                                                   :on-change (fn [e]
                                                                (dispatch [:update-current-maker-fullname (-> e .-target .-value)]))}]]
+
        [:div.form-group
         [:label {:for "new-maker-country"} "Country:"]
         [:input#new-maker-country.form-control {:type "text"
@@ -59,23 +60,23 @@
 
 (defn new-maker-input
   []
-  (let [new-maker-active? (subscribe [:new-maker-active?])]
+  (let [active-edit-maker (subscribe [:active-edit-maker])]
     (fn []
-      (if @new-maker-active?
+      (if (= "new" @active-edit-maker)
         [new-maker-form]
         [new-maker-link]))))
 
 (defn main-panel
   []
-  (let [makers (subscribe [:makers])
-        maker-names (reaction (map :name @makers))]
+  (let [makers (subscribe [:makers])]
     (fn []
       [:head
        [focus-handler]]
       [:div [:h2 "Gemtoes Admin"]
        [:ul
-        (for [maker-name @maker-names]
-          [:li {:key maker-name} maker-name])
+        (for [maker @makers]
+          [:li {:key (:id maker)} (:name maker)])
         [:li
          [new-maker-input]]]])))
+
 
