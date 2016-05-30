@@ -56,7 +56,9 @@
        [:div.form-group
         [:button.btn.btn-default {:type "submit"
                                   :on-click (fn [e]
-                                              (dispatch [:save-maker]))} "Save"]]])))
+                                              (dispatch [:save-maker]))} "Save"]
+        [:button.btn.btn-default {:on-click (fn [e]
+                                              (dispatch [:activate-edit-maker ""]))} "Cancel"]]])))
 
 (defn maker-input
   [id name]
@@ -75,8 +77,6 @@
       [:div [:h2 "Gemtoes Admin"]
        [:ul
         (for [maker @makers]
-          [:li {:key (:id maker)} 
+          [:li {:key (:id maker)}
            [maker-input (:id maker) (:name maker)]])
         [:li [maker-input "new" "Add new maker"]]]])))
-
-
