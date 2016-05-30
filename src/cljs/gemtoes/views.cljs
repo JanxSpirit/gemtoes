@@ -4,10 +4,10 @@
 
 
 (defn new-maker-link
-  []
+  [id name]
   [:a {:href "#"
-       :on-click #(dispatch [:activate-edit-maker "new"])}
-   "Add new maker"]
+       :on-click #(dispatch [:activate-edit-maker id])}
+   name]
   )
 
 (defn focus-handler
@@ -58,13 +58,13 @@
                                   :on-click (fn [e]
                                               (dispatch [:save-maker]))} "Save"]]])))
 
-(defn new-maker-input
-  []
+(defn maker-input
+  [id name]
   (let [active-edit-maker (subscribe [:active-edit-maker])]
     (fn []
-      (if (= "new" @active-edit-maker)
+      (if (= id @active-edit-maker)
         [new-maker-form]
-        [new-maker-link]))))
+        [new-maker-link id name]))))
 
 (defn main-panel
   []
@@ -75,8 +75,8 @@
       [:div [:h2 "Gemtoes Admin"]
        [:ul
         (for [maker @makers]
-          [:li {:key (:id maker)} (:name maker)])
-        [:li
-         [new-maker-input]]]])))
+          [:li {:key (:id maker)} 
+           [maker-input (:id maker) (:name maker)]])
+        [:li [maker-input "new" "Add new maker"]]]])))
 
 

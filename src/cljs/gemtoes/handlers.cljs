@@ -16,7 +16,8 @@
 (register-handler
  :activate-edit-maker
  (fn [db [_ id]]
-   (assoc db :active-edit-maker id)))
+   (let [maker (first (filter #(= id (:id %)) (:makers db)))]
+     (assoc db :current-maker maker :active-edit-maker id))))
 
 (register-handler
  :save-maker
@@ -35,22 +36,22 @@
 (register-handler
  :update-current-maker-name
  (fn [db [_ name]]
-   (assoc db :current-maker (assoc (:current-maker db {}) :name name))))
+   (assoc-in db [:current-maker :name] name)))
 
 (register-handler
  :update-current-maker-fullname
  (fn [db [_ fullname]]
-   (assoc db :current-maker (assoc (:current-maker db {}) :fullname fullname))))
+   (assoc-in db [:current-maker :fullname] fullname)))
 
 (register-handler
  :update-current-maker-country
  (fn [db [_ country]]
-   (assoc db :current-maker (assoc (:current-maker db {}) :country country))))
+   (assoc-in db [:current-maker :country] country)))
 
 (register-handler
  :update-current-maker-min-order
  (fn [db [_ min-order]]
-   (assoc-in db [:current-maker :min-order] 
+   (assoc-in db [:current-maker :min-order]
              (let [int-min-order (js/parseInt min-order)]
                (if (js/isNaN int-min-order) 0 int-min-order)))))
 
