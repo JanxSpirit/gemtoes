@@ -8,11 +8,6 @@
    (reaction (:makers @db))))
 
 (register-sub
- :new-maker-active?
- (fn [db]
-   (reaction (:new-maker-active? @db))))
-
-(register-sub
  :current-maker-name
  (fn [db]
    (reaction (get-in @db [:current-maker :name]))))
