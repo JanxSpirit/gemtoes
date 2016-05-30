@@ -7,7 +7,7 @@
   (GET "/api/makers"
        {:response-format :json
         :keywords? true
-        :handler #(dispatch [:update-makers (:body %)])}))
+        :handler #(dispatch [:update-makers (get-in % [:result])])}))
 
 (defn post-maker [maker]
   (POST "/api/makers"
