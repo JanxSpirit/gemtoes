@@ -11,7 +11,15 @@
             [monger.conversion :as mconvert]))
 
 (s/defschema Gmto
-  {:title s/Str})
+  {(s/optional-key :id) s/Str
+   :title s/Str})
+
+(s/defschema Maker
+  {(s/optional-key :id) s/Str
+   :name s/Str
+   :fullname s/Str
+   :country s/Str
+   :min-order Long})
 
 (def conn (mg/connect))
 (def db   (mg/get-db conn "gemtoes"))
@@ -21,20 +29,16 @@
       (assoc :id (str (:_id dbo)))
       (dissoc :_id)))
 
-(defn save-gmto [gmto] 
-  (clean-object-id (mc/insert-and-return db "gmtos" gmto)))
+(defn save-to-mongo! [dbo dbname] 
+  (clean-object-id (mc/insert-and-return db dbname dbo)))
 
-(defn save-maker [maker] 
-  (clean-object-id (mc/insert-and-return db "makers" maker)))
+(defn get-makers [] (map clean-object-id (mc/find-maps db "makers")))
 
-(defn get-makers [] (let [res (map #(dissoc % :_id) (mc/find-maps db "makers"))]
-                      (println res)
-                      res
-                      ))
+(defn get-gmtos [] (map clean-object-id (mc/find-maps db "gmtos")))
 
 (def mount-target
   [:div#app
-      [:h3 "ClojureScript has not been compiled!"]
+      [:h3 "ClojureScript has not been compiled!!!"]
       [:p "please run "
        [:b "lein figwheel"]
        " in order to start the compiler"]])
@@ -63,17 +67,27 @@
            (context "/gmtos" []
                     :tags ["gmtos"]
                     (GET "/" []
-                         :return {:result Gmto}
+                         :return {:result [Gmto]}
                          :summary "Return list of GMTOs"
-                         (response/ok {:result {:title "My GMTO"}}))
+                         (response/ok {:result (get-gmtos)}))
                     (POST "/" []
-                          :return s/Str
+                          :return {:result Gmto}
                           :body [gmto Gmto]
                           :summary "Add a GMTO"
-                          (response/created (save-gmto gmto))))
-          #_ (context "/makers"
-                      (GET "/" [] (response/ok {:body (get-makers)}))
-                    (POST "/" request (response/created (str (save-maker (request :params)))))))
+                          (response/created 
+                           {:result (save-to-mongo! gmto "gmtos")})))
+           (context "/makers" []
+                    :tags ["makers"]
+                    (GET "/" [] 
+                         :return {:result [Maker]}
+                         :summary "Return a list of Makers"
+                         (response/ok {:result (get-makers)}))
+                    (POST "/" [] 
+                          :return {:result Maker}
+                          :body [maker Maker]
+                          :summary "Add a Maker"
+                          (response/created 
+                           {:result (save-to-mongo! maker "makers")}))))
 
   (resources "/")
   (not-found "Not Found")
