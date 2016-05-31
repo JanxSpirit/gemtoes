@@ -1,7 +1,8 @@
 (ns gemtoes.handlers
-  (:require [re-frame.core :as re-frame :refer [register-handler]]
+  (:require [clojure.string :as str]
+            [re-frame.core :as re-frame :refer [register-handler]]
             [gemtoes.db :as db]
-            [gemtoes.api-calls :as api-calls :refer [get-makers post-maker]]))
+            [gemtoes.api-calls :as api-calls :refer [get-makers put-maker]]))
 
 (register-handler
  :initialize-db
@@ -22,21 +23,29 @@
 (register-handler
  :save-maker
  (fn [db [_]]
-   (if (some #(= (get-in db [:current-maker :name]) (:name %)) (:makers db))
-     db
-     (do
-       (post-maker {:name (get-in db [:current-maker :name])
-                    :fullname (get-in db [:current-maker :fullname])
-                    :country (get-in db [:current-maker :country])
-                    :min-order (get-in db [:current-maker :min-order])})
-       (-> db
-           (dissoc :active-edit-maker)
-           (assoc :current-maker db/empty-maker))))))
+   (let [newmaker (= "new" (:active-edit-maker db))]
+     (if (and
+          newmaker
+          (some #(= (get-in db [:current-maker :name]) (:name %)) (:makers db)))
+       db
+       (do
+         (let [maker (if newmaker
+                       (assoc (:current-maker db) :id
+                              (-> (get-in db [:current-maker :name])
+                                  (str/trim)
+                                  (str/lower-case)
+                                  (str/replace " " "-")))
+                       (:current-maker db))]
+           (put-maker maker))
+         (-> db
+             (dissoc :active-edit-maker)
+             (assoc :current-maker db/empty-maker)))))))
 
 (register-handler
  :update-current-maker-name
  (fn [db [_ name]]
-   (assoc-in db [:current-maker :name] name)))
+   (-> db
+       (assoc-in [:current-maker :name] name))))
 
 (register-handler
  :update-current-maker-fullname

@@ -1,5 +1,5 @@
 (ns gemtoes.api-calls
-  (:require [ajax.core :as ajax :refer [GET POST]]
+  (:require [ajax.core :as ajax :refer [GET POST PUT DELETE]]
             [re-frame.core :as re-frame :refer [dispatch]]))
 
 ;;admin API GET calls
@@ -9,8 +9,8 @@
         :keywords? true
         :handler #(dispatch [:update-makers (get-in % [:result])])}))
 
-(defn post-maker [maker]
-  (POST "/api/makers"
+(defn put-maker [maker]
+  (PUT (str "/api/makers/" (:id maker))
         {:format :json
          :keywords? true
          :handler #(dispatch [:get-makers])

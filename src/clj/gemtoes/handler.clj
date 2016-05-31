@@ -29,8 +29,13 @@
       (assoc :id (str (:_id dbo)))
       (dissoc :_id)))
 
-(defn save-to-mongo! [dbo dbname] 
-  (clean-object-id (mc/insert-and-return db dbname dbo)))
+(defn set-object-id [id dbo]
+  (-> dbo
+      (assoc :_id id)
+      (dissoc :id)))
+
+(defn save-to-mongo! [id dbo collname]
+  (clean-object-id (mc/save-and-return db collname (set-object-id id dbo))))
 
 (defn get-makers [] (map clean-object-id (mc/find-maps db "makers")))
 
@@ -74,25 +79,23 @@
                           :return {:result Gmto}
                           :body [gmto Gmto]
                           :summary "Add a GMTO"
-                          (response/created 
+                          (response/created
                            {:result (save-to-mongo! gmto "gmtos")})))
            (context "/makers" []
                     :tags ["makers"]
-                    (GET "/" [] 
+                    (GET "/" []
                          :return {:result [Maker]}
                          :summary "Return a list of Makers"
                          (response/ok {:result (get-makers)}))
-                    (POST "/" [] 
+                    (PUT "/:id" [id]
                           :return {:result Maker}
                           :body [maker Maker]
                           :summary "Add a Maker"
-                          (response/created 
-                           {:result (save-to-mongo! maker "makers")}))))
+                          (response/created
+                           {:result (save-to-mongo! id maker "makers")}))))
 
   (resources "/")
   (not-found "Not Found")
   )
 
 (def app (wrap-middleware #'gtroutes))
-
-

@@ -3,7 +3,7 @@
   (:require [re-frame.core :as re-frame :refer [subscribe dispatch]]))
 
 
-(defn new-maker-link
+(defn maker-link
   [id name]
   [:a {:href "#"
        :on-click #(dispatch [:activate-edit-maker id])}
@@ -16,7 +16,7 @@
     (fn []
       (.focus (.getElementById js/document @focus-element-id)))))
 
-(defn new-maker-form
+(defn maker-form
   []
   (let [current-maker-name (subscribe [:current-maker-name])
         current-maker-fullname (subscribe [:current-maker-fullname])
@@ -65,8 +65,8 @@
   (let [active-edit-maker (subscribe [:active-edit-maker])]
     (fn []
       (if (= id @active-edit-maker)
-        [new-maker-form]
-        [new-maker-link id name]))))
+        [maker-form]
+        [maker-link id name]))))
 
 (defn main-panel
   []
