@@ -34,6 +34,9 @@
       (assoc :_id id)
       (dissoc :id)))
 
+(defn delete-from-mongo! [id collname]
+  (= 1 (.getN (mc/remove-by-id db collname id))))
+
 (defn save-to-mongo! [id dbo collname]
   (clean-object-id (mc/save-and-return db collname (set-object-id id dbo))))
 
@@ -92,7 +95,10 @@
                           :body [maker Maker]
                           :summary "Add a Maker"
                           (response/created
-                           {:result (save-to-mongo! id maker "makers")}))))
+                           {:result (save-to-mongo! id maker "makers")}))
+                    (DELETE "/:id" [id]
+                            :summary "Delete a Maker"
+                            (response/ok (:result (delete-from-mongo! id "makers"))))))
 
   (resources "/")
   (not-found "Not Found")
