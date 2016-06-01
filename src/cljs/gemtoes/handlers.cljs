@@ -10,6 +10,11 @@
    db/default-db))
 
 (register-handler
+ :display-page
+ (fn [db [_ page]]
+   (assoc db :display-page page)))
+
+(register-handler
  :update-makers
  (fn [db [_ makers]]
    (assoc db :makers makers :makers-loading? false)))

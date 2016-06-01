@@ -3,6 +3,11 @@
   (:require [re-frame.core :as re-frame :refer [register-sub]]))
 
 (register-sub
+ :display-page
+ (fn [db]
+   (reaction (:display-page @db))))
+
+(register-sub
  :makers
  (fn [db]
    (reaction (:makers @db))))

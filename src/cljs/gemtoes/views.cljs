@@ -1,6 +1,7 @@
 (ns gemtoes.views
   (:require-macros [reagent.ratom :refer [reaction]])
-  (:require [re-frame.core :as re-frame :refer [subscribe dispatch]]))
+  (:require [re-frame.core :as re-frame :refer [subscribe dispatch]]
+            [reagent.core :as reagent]))
 
 
 (defn maker-link
@@ -70,15 +71,34 @@
         [maker-form]
         [maker-link id name]))))
 
+
+;;panels
 (defn main-panel
+  []
+  (let [display-page (subscribe [:display-page])]
+    (fn []
+      (case @display-page
+        :admin [admin-panel]
+        :home [home-panel]))))
+
+(defn home-panel
+  []
+  (fn []
+    [:div
+     [:a {:on-click #(dispatch [:display-page :admin])} "admin"]]))
+
+(defn admin-panel
   []
   (let [makers (subscribe [:makers])]
     (fn []
-      [:head
-       [focus-handler]]
-      [:div [:h2 "Gemtoes Admin"]
+      [:div
+       [:a {:on-click #(dispatch [:display-page :home])} "home"]
+       [:h2 "Gemtoes Admin"]
        [:ul
         (for [maker @makers]
           [:li {:key (:id maker)}
            [maker-input (:id maker) (:name maker)]])
         [:li [maker-input "new" "Add new maker"]]]])))
+
+(def panels {:admin admin-panel
+             :home home-panel})

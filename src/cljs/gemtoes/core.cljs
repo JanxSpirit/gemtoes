@@ -17,6 +17,5 @@
 (defn ^:export init []
   (re-frame/dispatch-sync [:initialize-db])
   (re-frame/dispatch [:get-makers])
+  (re-frame/dispatch [:display-page :home])
   (mount-root))
-
-

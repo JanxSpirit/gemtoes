@@ -10,4 +10,5 @@
    :gmtos []
    :current-maker empty-maker
    :active-edit-maker ""
+   :display-page :home
    :focus-element-id ""})
