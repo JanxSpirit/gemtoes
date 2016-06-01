@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [re-frame.core :as re-frame :refer [register-handler]]
             [gemtoes.db :as db]
-            [gemtoes.api-calls :as api-calls :refer [get-makers put-maker]]))
+            [gemtoes.api-calls :as api-calls :refer [get-makers put-maker delete-maker]]))
 
 (register-handler
  :initialize-db
@@ -69,6 +69,14 @@
  (fn [db [_]]
    (get-makers)
    (assoc db :makers-loading? true)))
+
+(register-handler
+ :delete-maker
+ (fn [db [_]]
+   (delete-maker (:active-edit-maker db))
+   (-> db
+       (assoc :current-maker db/empty-maker)
+       (dissoc :active-edit-maker))))
 
 (register-handler
  :set-element-focus

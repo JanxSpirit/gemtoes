@@ -58,7 +58,9 @@
                                   :on-click (fn [e]
                                               (dispatch [:save-maker]))} "Save"]
         [:button.btn.btn-default {:on-click (fn [e]
-                                              (dispatch [:activate-edit-maker ""]))} "Cancel"]]])))
+                                              (dispatch [:activate-edit-maker ""]))} "Cancel"]
+        [:button.btn.btn-default {:on-click (fn [e]
+                                              (dispatch [:delete-maker]))} "Delete"]]])))
 
 (defn maker-input
   [id name]

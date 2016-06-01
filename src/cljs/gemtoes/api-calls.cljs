@@ -15,3 +15,9 @@
          :keywords? true
          :handler #(dispatch [:get-makers])
          :params maker}))
+
+(defn delete-maker [id]
+  (DELETE (str "/api/makers" (:id maker))
+          {:format :json
+           :keywords true
+           :handler #(dispatch [:get-makers])}))
