@@ -9,7 +9,7 @@
                  :summary ""
                  :maker ""
                  :last ""
-                 :stlye ""
+                 :style ""
                  :orders-count-needed 0
                  :comitted []
                  :canonical-listing ""
