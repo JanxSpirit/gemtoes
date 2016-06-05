@@ -1,13 +1,14 @@
 (ns gemtoes.views
   (:require-macros [reagent.ratom :refer [reaction]])
-  (:require [re-frame.core :as re-frame :refer [subscribe dispatch]]
+  (:require [gemtoes.views.home :refer [home-panel]]
+            [re-frame.core :as re-frame :refer [subscribe dispatch]]
             [reagent.core :as reagent]))
 
 
-(defn maker-link
-  [id name]
+(defn crud-link
+  [id name event]
   [:a {:href "#"
-       :on-click #(dispatch [:activate-edit-maker id])}
+       :on-click #(dispatch [event id])}
    name]
   )
 
@@ -59,18 +60,17 @@
                                   :on-click (fn [e]
                                               (dispatch [:save-maker]))} "Save"]
         [:button.btn.btn-default {:on-click (fn [e]
-                                              (dispatch [:activate-edit-maker ""]))} "Cancel"]
+                                              (dispatch [:active-edit-maker ""]))} "Cancel"]
         [:button.btn.btn-default {:on-click (fn [e]
                                               (dispatch [:delete-maker]))} "Delete"]]])))
 
-(defn maker-input
-  [id name]
-  (let [active-edit-maker (subscribe [:active-edit-maker])]
+(defn crud-input
+  [id name active-id-subs form]
+  (let [active-id (subscribe [active-id-subs])]
     (fn []
-      (if (= id @active-edit-maker)
+      (if (= id @active-id)
         [maker-form]
-        [maker-link id name]))))
-
+        [crud-link id name active-id-subs]))))
 
 ;;panels
 (defn main-panel
@@ -81,24 +81,16 @@
         :admin [admin-panel]
         :home [home-panel]))))
 
-(defn home-panel
-  []
-  (fn []
-    [:div
-     [:a {:on-click #(dispatch [:display-page :admin])} "admin"]]))
-
 (defn admin-panel
   []
   (let [makers (subscribe [:makers])]
     (fn []
       [:div
-       [:a {:on-click #(dispatch [:display-page :home])} "home"]
-       [:h2 "Gemtoes Admin"]
-       [:ul
-        (for [maker @makers]
-          [:li {:key (:id maker)}
-           [maker-input (:id maker) (:name maker)]])
-        [:li [maker-input "new" "Add new maker"]]]])))
-
-(def panels {:admin admin-panel
-             :home home-panel})
+         [:a {:on-click #(dispatch [:display-page :home])} "home"]
+         [:h2 "Gemtoes Admin"]
+         [:ul
+          (for [maker @makers]
+            (let [id (:id maker)]
+              [:li {:key (:id maker)}
+               [crud-input id (:name maker) :active-edit-maker maker-form]]))
+          [:li [crud-input "new" "Add new maker" :active-edit-maker maker-form]]]])))
