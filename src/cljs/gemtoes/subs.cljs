@@ -46,7 +46,7 @@
 
 (register-nested-crud-properties!
  "gmto"
- ["title"])
+ ["title" "summary" "maker" "last" "style" "orders-count-needed"])
 
 (register-nested-crud-properties!
  "maker"

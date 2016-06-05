@@ -100,7 +100,7 @@
 
 (register-nested-crud-string-properties!
  "gmto"
- ["title"])
+ ["title" "summary" "maker" "last" "style" "orders-count-needed"])
 
 (register-nested-crud-string-properties!
  "maker"
