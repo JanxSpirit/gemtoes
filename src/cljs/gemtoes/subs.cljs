@@ -47,3 +47,13 @@
  :gmtos
  (fn [db]
    (reaction (:gmtos @db))))
+
+(register-sub
+ :active-edit-gmto
+ (fn [db]
+   (reaction (:active-edit-gmto @db))))
+
+(register-sub
+ :current-gmto-title
+ (fn [db]
+   (reaction (get-in @db [:current-gmto :title]))))

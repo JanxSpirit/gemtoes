@@ -29,6 +29,12 @@
      (assoc db :current-maker maker :active-edit-maker id))))
 
 (register-handler
+ :active-edit-gmto
+ (fn [db [_ id]]
+   (let [gmto (first (filter #(= id (:id %)) (:gmtos db)))]
+     (assoc db :current-gmto gmto :active-edit-gmto id))))
+
+(register-handler
  :save-maker
  (fn [db [_]]
    (let [newmaker (= "new" (:active-edit-maker db))]
@@ -97,3 +103,9 @@
  (fn [db [_]]
    (get-gmtos)
    (assoc db :gmtos-loading? true)))
+
+(register-handler
+ :update-current-gmto-title
+ (fn [db [_ title]]
+   (-> db
+       (assoc-in [:current-gmto :title] title))))

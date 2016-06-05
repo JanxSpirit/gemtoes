@@ -58,6 +58,6 @@
          [:ul
           (for [maker @makers]
             (let [id (:id maker)]
-              [:li {:key (:id maker)}
+              [:li {:key id}
                [crud-input id (:name maker) :active-edit-maker maker-form]]))
           [:li [crud-input "new" "Add new maker" :active-edit-maker maker-form]]]])))

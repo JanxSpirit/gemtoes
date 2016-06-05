@@ -20,7 +20,9 @@
   {:makers []
    :gmtos []
    :current-maker empty-maker
+   :current-gmto empty-gmto
    :active-edit-maker ""
+   :active-edit-gmto ""
    :display-page :home
    :focus-element-id ""
    :makers-loading? false
