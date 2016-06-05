@@ -2,7 +2,10 @@
   (:require [clojure.string :as str]
             [re-frame.core :as re-frame :refer [register-handler]]
             [gemtoes.db :as db]
-            [gemtoes.api-calls :as api-calls :refer [get-makers put-maker delete-maker]]))
+            [gemtoes.api-calls :as api-calls :refer [get-makers
+                                                     put-maker
+                                                     delete-maker
+                                                     get-gmtos]]))
 
 (register-handler
  :initialize-db
@@ -20,7 +23,7 @@
    (assoc db :makers makers :makers-loading? false)))
 
 (register-handler
- :activate-edit-maker
+ :active-edit-maker
  (fn [db [_ id]]
    (let [maker (first (filter #(= id (:id %)) (:makers db)))]
      (assoc db :current-maker maker :active-edit-maker id))))
@@ -87,3 +90,10 @@
  :set-element-focus
  (fn [db [_ focus-element-id]]
    (assoc db :focus-element-id focus-element-id)))
+
+;; gmtos
+(register-handler
+ :get-gmtos
+ (fn [db [_]]
+   (get-gmtos)
+   (assoc db :gmtos-loading? true)))

@@ -3,6 +3,7 @@
             [re-frame.core :as re-frame :refer [dispatch]]))
 
 ;;admin API GET calls
+;; makers
 (defn get-makers []
   (GET "/api/makers"
        {:response-format :json
@@ -21,3 +22,10 @@
           {:format :json
            :keywords true
            :handler #(dispatch [:get-makers])}))
+
+;; gmtos
+(defn get-gmtos []
+  (GET "/api/gmtos"
+       {:response-format :json
+        :keywords? true
+        :handler #(dispatch [:update-gmtos (get-in % [:result])])}))

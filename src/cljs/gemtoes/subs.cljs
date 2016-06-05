@@ -41,3 +41,9 @@
  :active-edit-maker
  (fn [db]
    (reaction (:active-edit-maker @db))))
+
+;; gmtos
+(register-sub
+ :gmtos
+ (fn [db]
+   (reaction (:gmtos @db))))
