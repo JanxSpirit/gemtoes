@@ -56,22 +56,6 @@
              (assoc :current-maker db/empty-maker)))))))
 
 (register-handler
- :update-current-maker-name
- (fn [db [_ name]]
-   (-> db
-       (assoc-in [:current-maker :name] name))))
-
-(register-handler
- :update-current-maker-fullname
- (fn [db [_ fullname]]
-   (assoc-in db [:current-maker :fullname] fullname)))
-
-(register-handler
- :update-current-maker-country
- (fn [db [_ country]]
-   (assoc-in db [:current-maker :country] country)))
-
-(register-handler
  :update-current-maker-min-order
  (fn [db [_ min-order]]
    (assoc-in db [:current-maker :min-order]
@@ -104,8 +88,20 @@
    (get-gmtos)
    (assoc db :gmtos-loading? true)))
 
-(register-handler
- :update-current-gmto-title
- (fn [db [_ title]]
-   (-> db
-       (assoc-in [:current-gmto :title] title))))
+(defn register-nested-crud-string-properties!
+  [model properties]
+  (doseq [prop properties]
+    (let [db-model (keyword (str "current-" model))
+          handler-name (keyword (str "update-current-" model "-" prop))]
+      (register-handler
+       handler-name
+       (fn [db [_ p]]
+         (assoc-in db [db-model (keyword prop)] p))))))
+
+(register-nested-crud-string-properties!
+ "gmto"
+ ["title"])
+
+(register-nested-crud-string-properties!
+ "maker"
+ ["name" "fullname" "country"])

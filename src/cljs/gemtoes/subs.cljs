@@ -8,34 +8,15 @@
    (reaction (:display-page @db))))
 
 (register-sub
- :makers
- (fn [db]
-   (reaction (:makers @db))))
-
-(register-sub
- :current-maker-name
- (fn [db]
-   (reaction (get-in @db [:current-maker :name]))))
-
-(register-sub
- :current-maker-fullname
- (fn [db]
-   (reaction (get-in @db [:current-maker :fullname]))))
-
-(register-sub
- :current-maker-country
- (fn [db]
-   (reaction (get-in @db [:current-maker :country]))))
-
-(register-sub
- :current-maker-min-order
- (fn [db]
-   (reaction (get-in @db [:current-maker :min-order]))))
-
-(register-sub
  :set-focus
  (fn [db]
    (reaction (:focus-element-id @db))))
+
+;; makers
+(register-sub
+ :makers
+ (fn [db]
+   (reaction (:makers @db))))
 
 (register-sub
  :active-edit-maker
@@ -53,7 +34,20 @@
  (fn [db]
    (reaction (:active-edit-gmto @db))))
 
-(register-sub
- :current-gmto-title
- (fn [db]
-   (reaction (get-in @db [:current-gmto :title]))))
+(defn register-nested-crud-properties!
+  [model properties]
+  (doseq [prop properties]
+    (let [db-model (keyword (str "current-" model))
+          sub-name (keyword (str "current-" model "-" prop))]
+      (register-sub
+       sub-name
+       (fn [db]
+         (reaction (get-in @db [db-model (keyword prop)])))))))
+
+(register-nested-crud-properties!
+ "gmto"
+ ["title"])
+
+(register-nested-crud-properties!
+ "maker"
+ ["name" "fullname" "country" "min-order"])
